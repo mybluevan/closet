@@ -51,3 +51,6 @@ def close_db(error):
     db = getattr(g, 'db', None)
     if db is not None:
         db.close()
+
+if __name__ == '__main__':
+    app.run()
