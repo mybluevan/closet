@@ -8,8 +8,8 @@
 """
 
 # all the imports
+import os
 import sqlite3
-from contextlib import closing
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 
@@ -26,22 +26,13 @@ app.config.update(dict(
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
-def connect_db():
-    """Connects to the database."""
-    return sqlite3.connect(app.config['DATABASE'])
-
 def init_db():
     """Initializes the database."""
-    with closing(connect_db()) as db:
+    with app.app_context():
+        db = get_db()
         with app.open_resource('schema.sql', mode='r') as f:
             db.cursor().executescript(f.read())
         db.commit()
-
-@app.cli.command('initdb')
-def initdb_command():
-    """Creates the database tables."""
-    init_db()
-    print('Initialized the database.')
 
 def get_db():
     """Opens a new database connection if there is none yet for the
@@ -49,7 +40,9 @@ def get_db():
     """
     db = getattr(g, 'db', None)
     if db is None:
-        db = g._database = connect_to_database()
+        db = sqlite3.connect(app.config['DATABASE'])
+        db.row_factory = sqlite3.Row
+        g.db = db
     return db
 
 @app.teardown_appcontext
