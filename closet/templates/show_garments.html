@@ -1,5 +1,6 @@
-{% extends "layout.html" %}
-{% block body %}
+{% extends "base.html" %}
+{% block page_content %}
+  <div class="page-header"><h1>Garments</h1></div>
   {% if session.logged_in %}
     <form action="{{ url_for('add_garment') }}" method=post class=add-entry>
       <dl>

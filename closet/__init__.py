@@ -13,6 +13,7 @@ import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 from flask.ext.script import Manager
+from flask_bootstrap import Bootstrap
 
 # create application
 app = Flask(__name__)
@@ -28,6 +29,7 @@ app.config.update(dict(
 app.config.from_envvar('CLOSET_SETTINGS', silent=True)
 
 manager = Manager(app)
+bootstrap = Bootstrap(app)
 
 
 @manager.command
