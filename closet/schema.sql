@@ -1,8 +1,9 @@
 PRAGMA foreign_keys = ON;
 drop table if exists categories;
 create table categories (
-  slug text primary key not null,
+  id integer primary key autoincrement,
   parent integer references categories,
+  slug text not null unique,
   name text not null,
   picture text
 );
