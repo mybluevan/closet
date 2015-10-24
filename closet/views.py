@@ -20,7 +20,7 @@ def add_garment():
     db.execute('insert into garments (description) values (?)',
                [request.form['description'], ])
     db.commit()
-    flash('New garment was successfully added')
+    flash('New garment was successfully added', 'success')
     return redirect(url_for('show_garments'))
 
 
@@ -29,12 +29,12 @@ def login():
     error = None
     if request.method == 'POST':
         if request.form['username'] != app.config['USERNAME']:
-            error = 'Invalid username'
+            flash('Invalid username', 'warning')
         elif request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid password'
+            flash('Invalid password', 'warning')
         else:
             session['logged_in'] = True
-            flash('You were logged in')
+            flash('You were logged in', 'success')
             return redirect(url_for('show_garments'))
     return render_template('login.html', error=error)
 
@@ -42,5 +42,5 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
-    flash('You were logged out')
+    flash('You were logged out', 'info')
     return redirect(url_for('show_garments'))
