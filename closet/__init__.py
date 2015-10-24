@@ -26,6 +26,7 @@ app.config.update(dict(
 ))
 app.config.from_envvar('CLOSET_SETTINGS', silent=True)
 
+
 def init_db():
     """Initializes the database."""
     with app.app_context():
@@ -33,6 +34,7 @@ def init_db():
         with app.open_resource('schema.sql', mode='r') as f:
             db.cursor().executescript(f.read())
         db.commit()
+
 
 def get_db():
     """Opens a new database connection if there is none yet for the
@@ -44,6 +46,7 @@ def get_db():
         db.row_factory = sqlite3.Row
         g.db = db
     return db
+
 
 @app.teardown_appcontext
 def close_db(error):

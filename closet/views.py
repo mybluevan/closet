@@ -3,12 +3,14 @@ from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 from closet import app, get_db
 
+
 @app.route('/')
 def show_garments():
-    db = get_db()    
+    db = get_db()
     cur = db.execute('select description from garments order by id desc')
     garments = [dict(description=row[0]) for row in cur.fetchall()]
     return render_template('show_garments.html', garments=garments)
+
 
 @app.route('/add', methods=['POST'])
 def add_garment():
@@ -16,10 +18,11 @@ def add_garment():
         abort(401)
     db = get_db()
     db.execute('insert into garments (description) values (?)',
-                 [request.form['description'],])
+               [request.form['description'], ])
     db.commit()
     flash('New garment was successfully added')
     return redirect(url_for('show_garments'))
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -34,6 +37,7 @@ def login():
             flash('You were logged in')
             return redirect(url_for('show_garments'))
     return render_template('login.html', error=error)
+
 
 @app.route('/logout')
 def logout():
